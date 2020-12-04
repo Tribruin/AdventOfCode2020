@@ -62,15 +62,14 @@ def valid_passports_part2(passports):
                         break
                 elif key == "hgt":
                     hgt_m = value[-2:]
-                    if hgt_m in ["cm", "in"]:
+                    try:
                         hgt_v = int(value[:-2])
-                        if (hgt_m == "cm" and (150 <= hgt_v <= 193)) or (
-                            hgt_m == "in" and (59 <= hgt_v <= 76)
-                        ):
-                            pass
-                        else:
-                            valid = False
-                            break
+                    except ValueError:
+                        hgt_v = 0
+                    if (hgt_m == "cm" and (150 <= hgt_v <= 193)) or (
+                        hgt_m == "in" and (59 <= hgt_v <= 76)
+                    ):
+                        pass
                     else:
                         valid = False
                         break
