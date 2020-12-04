@@ -101,14 +101,13 @@ def valid_passports_part2(passports):
 
 
 def part1():
-    all_passports = read_file()
     print(valid_passports_part1(all_passports))
 
 
 def part2():
-    all_passports = read_file()
     print(valid_passports_part2(all_passports))
 
 
+all_passports = read_file()
 print(timeit.timeit(part1, number=1))
 print(timeit.timeit(part2, number=1))
