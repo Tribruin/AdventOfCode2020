@@ -4,9 +4,21 @@ import timeit
 INPUT_FILE = "day4-Input.txt"
 HCL_MATCH = "#[a-f0-9]{6}"
 ECL_MATCH = ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
+RANGE_VALUES = {
+    "byr": (1920, 2002),
+    "iyr": (2010, 2020),
+    "eyr": (2020, 2030),
+    "cm": (150, 193),
+    "in": (59, 76),
+}
 
 
 def read_file():
+    """Read the input file and generate the list of passports
+
+    Returns:
+        List: A list of passport dictionaries
+    """
     with open(INPUT_FILE) as f:
         lines = f.readlines()
 
@@ -37,36 +49,36 @@ def valid_passports_part1(passports):
 
 
 def valid_passports_part2(passports):
+    """Check for a valid passports in Part2 of the solutions
+
+    Args:
+        passports (List): passports is a list of dictionaries generated from the input file
+
+    Returns:
+        Int: Count of valid passports
+    """
+
+    def check_value_range(value, range):
+        low, high = range
+        if low <= value <= high:
+            return True
+        else:
+            return False
+
     count = 0
     for passport in passports:
         valid = True
         if len(passport) == 8 or (len(passport) == 7 and "cid" not in passport.keys()):
             for key, value in passport.items():
-                if key == "byr":
-                    if 1920 <= int(value) <= 2002:
-                        pass
-                    else:
-                        valid = False
-                        break
-                elif key == "iyr":
-                    if 2010 <= int(value) <= 2020:
-                        pass
-                    else:
-                        valid = False
-                        break
-                elif key == "eyr":
-                    if 2020 <= int(value) <= 2030:
-                        pass
-                    else:
+                if key in RANGE_VALUES.keys():
+                    if not check_value_range(int(value), RANGE_VALUES[key]):
                         valid = False
                         break
                 elif key == "hgt":
                     hgt_m = value[-2:]
                     if hgt_m in ["cm", "in"]:
                         hgt_v = int(value[:-2])
-                        if (hgt_m == "cm" and (150 <= hgt_v <= 193)) or (
-                            hgt_m == "in" and (59 <= hgt_v <= 76)
-                        ):
+                        if check_value_range(hgt_v, RANGE_VALUES[hgt_m]):
                             pass
                         else:
                             valid = False
@@ -75,21 +87,16 @@ def valid_passports_part2(passports):
                         valid = False
                         break
                 elif key == "hcl":
-                    if re.search(HCL_MATCH, value) != None:
-                        pass
-                    else:
+                    if not re.search(HCL_MATCH, value) != None:
                         valid = False
                         break
                 elif key == "ecl":
-                    if value in ECL_MATCH:
-                        pass
-                    else:
+                    if not value in ECL_MATCH:
                         valid = False
                         break
                 elif key == "pid":
+                    # if re.match("^[0-9]{9}$", value) == None:
                     if len(value) == 9:
-                        pass
-                    else:
                         valid = False
                         break
                 else:  # key == "cid"
