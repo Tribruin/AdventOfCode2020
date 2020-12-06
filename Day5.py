@@ -31,7 +31,7 @@ def decode_boarding_pass(code):
 
 
 def part1():
-    best_value = 0
+    best_value, best_s, best_r = 0, 0, 0
     for boarding_pass in boarding_passes:
         r, s = decode_boarding_pass(boarding_pass)
         value = 8 * r + s
