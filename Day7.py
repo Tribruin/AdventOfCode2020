@@ -1,4 +1,5 @@
 from timeit import timeit
+import re
 
 INPUT_FILE = "Day7-Input.txt"
 BAG_TO_FIND = "shiny gold"
@@ -10,21 +11,18 @@ def read_file():
 
     all_bag_rules = dict()
     for line in lines:
-        bag, bag_rules = line.strip(".\n").split(" contain ")
-        bag_name = bag.split(" bag")[0]
+        bag_name, bag_rules = re.split(" contain ", line.strip(".\n"))
+        bag_name = re.sub(" bags*", "", bag_name).strip()
         if bag_rules == "no other bags":
             all_bag_rules[bag_name] = {"none": 0}
         else:
             tmp_dict = {}
-            bag_rules_split = [i.strip() for i in bag_rules.strip(".").split(",")]
+            bag_rules_split = re.split(", ", bag_rules)
             for bag_rule in bag_rules_split:
-                qty, color = (
-                    int(bag_rule.strip()[0]),
-                    bag_rule[1:].strip().split(" bag")[0],
-                )
-                tmp_dict[color] = qty
+                qty, color = re.split(" ", bag_rule, maxsplit=1)
+                color = re.sub(" bags*", "", color)
+                tmp_dict[color] = int(qty)
             all_bag_rules[bag_name] = tmp_dict
-        # all_bag_rules.append(bag_rule_final)
     return all_bag_rules
 
 
