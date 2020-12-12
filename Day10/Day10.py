@@ -1,4 +1,13 @@
-from AOC import AOC
+INPUT_FILE = "day10-Input-Test.txt"
+# INPUT_FILE = "day10-Input.txt"
+
+
+def read_file():
+    with open(INPUT_FILE, "r") as f:
+        adaptors = [0] + [int(i) for i in f.read().splitlines()]
+        adaptors.sort()
+        adaptors.append(adaptors[-1] + 3)
+    return adaptors
 
 
 def part1():
@@ -17,17 +26,14 @@ def part2():
     counts[0] = 1
 
     for inc, value in enumerate(adaptors):
+
         for x in range(1, 4):
             if abs(adaptors[inc] - adaptors[inc - x]) <= 3:
                 counts[adaptors[inc]] += counts[adaptors[inc - x]]
-
+    # print(counts)
     print(counts[adaptors[-1]])
 
 
-a = AOC(10, False)
-adaptors = [0] + a.read_int()
-adaptors.sort()
-adaptors.append(adaptors[-1] + 3)
-print(adaptors)
+adaptors = read_file()
 part1()
 part2()
