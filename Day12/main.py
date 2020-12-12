@@ -6,7 +6,7 @@ from AOC import AOC
 
 move_options = {"N": (0, -1), "E": (1, 0), "S": (0, 1), "W": (-1, 0)}
 move_directions = list(move_options.values())
-dir_chars = ["N", "E", "S", "W"]
+dir_chars = list(move_options.keys())
 turn_chars = ["L", "R"]
 move_char = ["F"]
 
@@ -27,15 +27,17 @@ class Ferry_Nav:
 
     def move_ferry(self, direction, move_value):
         x1, y1 = move_options[direction]
-        self.x, self.y = self.x + x1 * move_value, self.y + y1 * move_value
+        self.x += x1 * move_value
+        self.y += y1 * move_value
 
-    def forward(self, move_value):
+    def forward_part1(self, move_value):
         x1, y1 = self.move_x, self.move_y
         self.x, self.y = self.x + x1 * move_value, self.y + y1 * move_value
 
     def move_waypoint(self, direction, move_value):
         x1, y1 = move_options[direction]
-        self.wp_x, self.wp_y = self.wp_x + x1 * move_value, self.wp_y + y1 * move_value
+        self.wp_x += x1 * move_value
+        self.wp_y += y1 * move_value
 
     def forward_part2(self, move_value):
         self.x, self.y = (
@@ -66,7 +68,7 @@ def part1():
         elif char in turn_chars:
             ferry.turn_ferry(char, value)
         else:
-            ferry.forward(value)
+            ferry.forward_part1(value)
         # print(f"x={ferry.x} y={ferry.y} dir={ferry.direction}")
 
     print(ferry.x, ferry.y, ferry.manhattan_dist())
