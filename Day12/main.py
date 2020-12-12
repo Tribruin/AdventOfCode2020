@@ -15,36 +15,29 @@ class Ferry_Nav:
     def __init__(self):
         self.x, self.y = 0, 0
         self.wp_x, self.wp_y = 10, -1
-        self.direction = "E"
-        self.move_x, self.move_y = move_options[self.direction]
+        self.move_x, self.move_y = move_options["E"]
 
-    def turn(self, direction, degrees):
+    def turn_ferry(self, direction, degrees):
         for _ in range(degrees // 90):
             if direction == "R":
                 self.move_x, self.move_y = -self.move_y, self.move_x
             else:
                 self.move_x, self.move_y = self.move_y, -self.move_x
-
-        self.direction = dir_chars[move_directions.index((self.move_x, self.move_y))]
         return
 
-    def move_direction(self, direction, move_value):
+    def move_ferry(self, direction, move_value):
         x1, y1 = move_options[direction]
         self.x, self.y = self.x + x1 * move_value, self.y + y1 * move_value
 
     def forward(self, move_value):
-        x1, y1 = move_options[self.direction]
+        x1, y1 = self.move_x, self.move_y
         self.x, self.y = self.x + x1 * move_value, self.y + y1 * move_value
-
-    def manhattan_dist(self):
-        return abs(self.x) + abs(self.y)
 
     def move_waypoint(self, direction, move_value):
         x1, y1 = move_options[direction]
         self.wp_x, self.wp_y = self.wp_x + x1 * move_value, self.wp_y + y1 * move_value
 
     def forward_part2(self, move_value):
-        # x1, y1 = move_options[self.direction]
         self.x, self.y = (
             self.x + self.wp_x * move_value,
             self.y + self.wp_y * move_value,
@@ -57,21 +50,24 @@ class Ferry_Nav:
             else:
                 self.wp_x, self.wp_y = self.wp_y, -self.wp_x
 
+    def manhattan_dist(self):
+        return abs(self.x) + abs(self.y)
+
 
 def part1():
 
     ferry = Ferry_Nav()
     for step in steps:
         char, value = step["move"], step["value"]
-        print(f"{char}{value}: ", end="")
+        # print(f"{char}{value}: ", end="")
 
         if char in dir_chars:
-            ferry.move_direction(char, value)
+            ferry.move_ferry(char, value)
         elif char in turn_chars:
-            ferry.turn(char, value)
+            ferry.turn_ferry(char, value)
         else:
             ferry.forward(value)
-        print(f"x={ferry.x} y={ferry.y} dir={ferry.direction}")
+        # print(f"x={ferry.x} y={ferry.y} dir={ferry.direction}")
 
     print(ferry.x, ferry.y, ferry.manhattan_dist())
 
@@ -80,14 +76,14 @@ def part2():
     ferry = Ferry_Nav()
     for step in steps:
         char, value = step["move"], step["value"]
-        print(f"{char}{value}: ", end="")
+        # print(f"{char}{value}: ", end="")
         if char in dir_chars:
             ferry.move_waypoint(char, value)
         elif char in turn_chars:
             ferry.turn_waypoint(char, value)
         else:
             ferry.forward_part2(value)
-        print(f"x={ferry.x} y={ferry.y} wp_x = {ferry.wp_x} wp_y = {ferry.wp_y}")
+        # print(f"x={ferry.x} y={ferry.y} wp_x = {ferry.wp_x} wp_y = {ferry.wp_y}")
 
     print(ferry.x, ferry.y, ferry.manhattan_dist())
 
