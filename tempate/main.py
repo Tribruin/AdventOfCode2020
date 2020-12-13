@@ -13,4 +13,4 @@ def part2():
     pass
 
 
-a = AOC([INT], test=True)
+a = AOC({{INT}}), test=True)
