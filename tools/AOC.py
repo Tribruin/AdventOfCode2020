@@ -1,6 +1,6 @@
-from genericpath import exists
 import requests
 from os import path
+from datetime import datetime
 
 # Login in to Advent of Code and get the session cookie. Cookies last one month, so will need to reset
 SESSION_ID = "53616c7465645f5fec0de59dcb22942549edaa80deb4498cf25b1fb94b7ad561b377e004e238d17e029fa98ded4ccfa0"
@@ -31,6 +31,7 @@ class AOC:
             aoc_input_url = f"https://adventofcode.com/{YEAR}/day/{self.day}/input"
             cookies = dict(session=SESSION_ID)
             response = requests.get(url=aoc_input_url, cookies=cookies)
+
             txt = response.text
             with open(self.input_file, "w") as f:
                 f.write(txt)
@@ -49,7 +50,10 @@ class AOC:
 
 
 def main():
-    a = AOC(10, True)
+    day = datetime.now().day
+    if day > 25:
+        day = 25
+    a = AOC(day, True)
     test = a.read_int()
     print(test)
 

@@ -32,5 +32,5 @@ def part2():
 
 
 a = AOC(13, test=False)
-print(timeit(part1, number=100))
-print(timeit(part2, number=100))
+print(timeit(part1, number=1))
+print(timeit(part2, number=1))
