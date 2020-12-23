@@ -1,3 +1,8 @@
+import sys
+
+sys.path.append("/Users/rblount/Scripts/AdventOfCode/2020/tools")
+
+
 from AOC import AOC
 
 
