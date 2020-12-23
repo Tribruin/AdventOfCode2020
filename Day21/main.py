@@ -1,4 +1,5 @@
 import sys
+from itertools import chain
 
 sys.path.append("/Users/rblount/Scripts/AdventOfCode/2020/tools")
 
@@ -18,22 +19,38 @@ def parse_input(data):
 
 
 def part1():
-    all_allegens_temp = []
-    all_ingred_temp = []
-    for x in ingred_list:
-        all_allegens_temp += x["allegens"]
-        all_ingred_temp += x["ingred"]
-    all_allegens = set(all_allegens_temp)
-    all_ingred = set(all_ingred_temp)
-    print(all_allegens)
-    print(all_ingred)
+    # Collect all allegens and ingreds and put each in to a set
+    all_allegens = set([y for x in ingred_list for y in x["allegens"]])
+    all_ingred = set([y for x in ingred_list for y in x["ingred"]])
+    ingred_w_allegens = list()
+    for allegen in all_allegens:
+        possible_ingreds = all_ingred
+        for line in ingred_list:
+            if allegen in line["allegens"]:
+                possible_ingreds = possible_ingreds.intersection(set(line["ingred"]))
+        ingred_w_allegens += list(possible_ingreds)
+    ingreds_wo_allegens = set(all_ingred.difference(set(ingred_w_allegens)))
+    total_count = 0
+    for ingred in ingreds_wo_allegens:
+        for line in ingred_list:
+            if ingred in line["ingred"]:
+                total_count += 1
+    print(total_count)
+    return ingreds_wo_allegens
 
 
 def part2():
+    all_allegens = set([y for x in ingred_list for y in x["allegens"]])
+    all_ingred = set([y for x in ingred_list for y in x["ingred"]])
+    unused_ingreds = part1()
+    ingred_allegen = dict()
+    allegen_ingreds = all_ingred.difference(unused_ingreds)
+
     pass
 
 
 a = AOC(21, test=True)
 data = a.read_lines()
 ingred_list = parse_input(data)
-part1()
+# part1()
+part2()
