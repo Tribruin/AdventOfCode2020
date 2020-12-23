@@ -16,7 +16,7 @@ def play_game(game, moves):
         while destination not in game:
             destination -= 1
             if destination <= 0:
-                destination = 9
+                destination = max(game)
         insert_point = game.index(destination)
         for x in range(0, 3):
             game.insert(insert_point + x + 1, cups_removed[x])
@@ -38,6 +38,7 @@ def part1():
 
 def part2():
     game2 = deepcopy(INITAL_LABEL) + deque(range(10, 1000001))
+    # game2 = play_game(game2, 100)
     game2 = play_game(game2, 10000000)
 
     one_position = game2.index(1)
