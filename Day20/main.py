@@ -4,6 +4,7 @@ import numpy as np
 from math import sqrt
 
 sys.path.append("/Users/rblount/Scripts/AdventOfCode/2020/tools")
+sys.path.append("/Users/blountr/Scripts/AdventOfCode/2020/tools")
 
 from AOC import AOC
 
