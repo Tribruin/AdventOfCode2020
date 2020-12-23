@@ -64,6 +64,8 @@ def part1():
 
 
 def part2():
+    global valid_tickets
+    print(valid_tickets)
     pass
 
 
