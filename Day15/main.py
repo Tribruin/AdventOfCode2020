@@ -1,8 +1,13 @@
-import sys
+class Number:
+    def __init__(self, number, last_spoken) -> None:
 
-sys.path.append("/Users/rblount/Scripts/AdventOfCode/2020/tools")
+        self.number = number
+        self.previous_spoken = None
+        self.last_spoken = last_spoken
 
-from AOC import AOC
+    def update(self, postion):
+        self.previous_spoken = self.last_spoken
+        self.last_spoken = postion
 
 
 def find_last(array, check):
@@ -26,43 +31,34 @@ def play_game(count):
 
 
 def play_game_alt(count):
-    last_position = dict()
-    words_spoken = input.split(",")
-    for n, i in enumerate(words_spoken[:-1]):
-        last_position[int(i)] = (0, n)
-    last_spoken = int(words_spoken[-1])
-    for i in range(len(words_spoken) - 1, count):
-        last_pos = last_position.get(last_spoken, None)
-        if last_pos == None:
-            last_position[last_spoken] = (0, i)
-            x, y = last_position[0]
-            last_position[0] = (y, i + 1)
-            last_spoken = 0
-            words_spoken.append(str(last_spoken))
+    all_numbers = {}
+    words_spoke = [int(x) for x in input.split(",")]
+    for n, number in enumerate(words_spoke):
+        all_numbers[number] = Number(number, n + 1)
+
+    last_number = words_spoke[-1]
+    for x in range(len(words_spoke), count):
+        last_postion = all_numbers.get(last_number, None)
+
+        if last_postion.previous_spoken == None:
+            new_number = 0
+            all_numbers[0].update(x + 1)
+            last_number = 0
+
         else:
-            x, y = last_pos
-            diff = y - x
-            last_position[diff] = (y, i + 1)
-            last_spoken = diff
-            words_spoken.append(str(last_spoken))
+            new_number = last_postion.last_spoken - last_postion.previous_spoken
+            if all_numbers.get(new_number, None) == None:
+                all_numbers[new_number] = Number(new_number, x + 1)
+            else:
+                all_numbers[new_number].update(x + 1)
+            last_number = new_number
 
-    # for i in range(len(words_spoken), count):
-
-    # last_word = words_spoke[-1]
-    # if last_word not in words_spoke[:-1]:
-    #     words_spoke.append("0")
-    #     previous_postion = last_position["0"]
-    #     last_position["0"] = i
-    # else:
-    #     last_spoken = i - previous_postion - 1
-    #     words_spoke.append(str(last_spoken))
-    #     previous_postion = last_position[last_word]
-    #     last_position[str(last_spoken)] = i
-    print(words_spoken[-1])
+        # print(f"Round: {x} - Next Number: {last_number}")
+    print(new_number)
 
 
 # a = AOC({{INT}}), test=True)
-input = "0,3,6"
-# input = "9,19,1,6,0,5,4"
-play_game_alt(2020)
-# play_game(30000000)
+# input = "0,3,6"
+input = "9,19,1,6,0,5,4"
+# play_game_alt(2020)
+play_game_alt(30000000)
