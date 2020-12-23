@@ -1,7 +1,9 @@
 import sys
 from copy import deepcopy
+import numpy as np
 
 sys.path.append("/Users/rblount/Scripts/AdventOfCode/2020/tools")
+sys.path.append("/Users/blountr/Scripts/AdventOfCode/2020/tools")
 
 from AOC import AOC
 
@@ -65,8 +67,47 @@ def part1():
 
 def part2():
     global valid_tickets
-    print(valid_tickets)
-    pass
+    ticket_order = {key: [] for key in ticket_rules.keys()}
+    tickets_to_check = np.array(valid_tickets)
+    for rule in ticket_rules.keys():
+        min1, max1, min2, max2 = (
+            ticket_rules[rule][0][0],
+            ticket_rules[rule][0][1],
+            ticket_rules[rule][1][0],
+            ticket_rules[rule][1][1],
+        )
+        for column in range(len(my_ticket)):
+            valid = True
+            for row in range(len(tickets_to_check)):
+                value = tickets_to_check[row][column]
+                if not (min1 <= value <= max1 or min2 <= value <= max2):
+                    valid = False
+                    break
+            if valid:
+                ticket_order[rule].append(column)
+
+    # for rule in ticket_rules.keys():
+    # print(ticket_order)
+    final_values = dict()
+    columns_found = set()
+    all_finished = False
+    while not all_finished:
+        # for key, value in ticket_order.items():
+        #     print(f"Rule: {key} - Valid Columns {len(value)} - {value}")
+        all_finished = True
+        for key, value in ticket_order.items():
+            if len(value) == 1:
+                final_values[key] = value[0]
+                columns_found.add(value[0])
+            else:
+                ticket_order[key] = list(set(value).difference(columns_found))
+                all_finished = False
+    final_number = 1
+    for key, column in ticket_order.items():
+        if key.startswith("departure"):
+            print(f"Key: {key} Column: {column[0]} My Ticket: {my_ticket[column[0]]}")
+            final_number *= my_ticket[column[0]]
+    print(final_number)
 
 
 a = AOC(16, test=False)
